@@ -51,7 +51,7 @@ checkoutButton.addEventListener("click", simulateCheckout);
 
 async function simulateCheckout() {
     const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co'; // REPLACE WITH YOUR SUPABASE URL
-    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4OUR_SUPABASE_ANON_KEY'; // REPLACE WITH YOUR SUPABASE ANON KEY
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4'; // REPLACE WITH YOUR SUPABASE ANON KEY
     const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     const orderData = cart.map(item => ({
