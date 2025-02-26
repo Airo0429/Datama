@@ -74,7 +74,7 @@ const products = [
     
     
     
-      cart.forEach(item => {
+     cart.forEach(item => {
     
      const li = document.createElement("li");
     
