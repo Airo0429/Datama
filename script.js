@@ -1,9 +1,9 @@
 const products = [
-    { id: 1, name: "Product 1", price: 25, imageUrl: "product1.jpg" },
-    { id: 2, name: "Product 2", price: 30, imageUrl: "product2.jpg" },
-    { id: 3, name: "Product 3", price: 20, imageUrl: "product3.jpg" },
-    { id: 4, name: "Product 4", price: 35, imageUrl: "product4.jpg" },
-    { id: 5, name: "Product 5", price: 40, imageUrl: "product5.jpg" }
+    { id: 1, name: "Product 1", price: 25, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_BLAC_2.jpg?v=1739819686&width=480" },
+    { id: 2, name: "Product 2", price: 30, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_NATL_2_d124fbbe-4c1a-4160-b36f-40e6229b83f2.jpg?v=1739819682&width=480" },
+    { id: 3, name: "Product 3", price: 20, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_GRPE_2_17cd6dcc-4f0e-49df-87ef-1f620fe001ab.jpg?v=1739819668&width=480" },
+    { id: 4, name: "Product 4", price: 35, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_YELO_2.jpg?v=1739819673&width=480" },
+    { id: 5, name: "Product 5", price: 40, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_NAVY_2_0c2ba580-5925-44de-bdf0-8805ea07fc0e.jpg?v=1739819678&width=480" }
 ];
 
 const productsDiv = document.getElementById("products");
