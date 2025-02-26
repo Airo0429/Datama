@@ -1,3 +1,7 @@
+const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
+const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey); // Moved to the top
+
 const products = [
     { id: 1, name: "Product 1", price: 25, imageUrl: "product1.jpg" },
     { id: 2, name: "Product 2", price: 30, imageUrl: "product2.jpg" },
@@ -51,10 +55,6 @@ checkoutButton.addEventListener("click", simulateCheckout);
 
 async function simulateCheckout() {
     try {
-        const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co';
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
-        const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
-
         const orderData = cart.map(item => ({
             productId: item.id,
             productName: item.name,
