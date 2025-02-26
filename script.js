@@ -2,8 +2,6 @@ const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
 const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-console.log("Supabase Client:", supabase); // Check if Supabase client is created
-
 const products = [
     {
         id: 1,
@@ -39,17 +37,21 @@ const products = [
 
 const productsDiv = document.getElementById("products");
 
-products.forEach(product => {
-    const productDiv = document.createElement("div");
-    productDiv.classList.add("product");
-    productDiv.innerHTML = `
-        <img src="${product.imageUrl}" alt="${product.name}" width="150">
-        <h3>${product.name}</h3>
-        <p>$${product.price}</p>
-        <button onclick="addToCart(${product.id})">Add to Cart</button>
-    `;
-    productsDiv.appendChild(productDiv);
-});
+if (productsDiv) { // Check if productsDiv exists
+    products.forEach(product => {
+        const productDiv = document.createElement("div");
+        productDiv.classList.add("product");
+        productDiv.innerHTML = `
+            <img src="${product.imageUrl}" alt="${product.name}" width="150">
+            <h3>${product.name}</h3>
+            <p>$${product.price}</p>
+            <button onclick="addToCart(${product.id})">Add to Cart</button>
+        `;
+        productsDiv.appendChild(productDiv);
+    });
+} else {
+    console.error("productsDiv element not found!"); // Log an error if productsDiv is not found
+}
 
 let cart = [];
 
@@ -87,8 +89,6 @@ async function simulateCheckout() {
             productName: item.name,
             price: item.price
         }));
-
-        console.log("Order Data:", orderData); // Check order data before Supabase insert
 
         const { error } = await supabase
             .from('orders')
