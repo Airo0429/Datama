@@ -6,6 +6,7 @@
     <title>Datama 1 E-commerce</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.stripe.com/v3/"></script> 
 </head>
 <body>
     <div id="products"></div>
@@ -15,6 +16,9 @@
         <p>Total: $<span id="cart-total">0</span></p>
         <button id="checkout">Simulate Checkout</button>
     </div>
+
+    <div id="payment-form" style="display: none;"></div> 
+
     <script>
         const products = [
             { id: 1, name: "DICE TEE PIGMENT DYED ( Black)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_BLAC_2.jpg?v=1739819686&width=480" },
@@ -86,12 +90,25 @@
                 if (error) {
                     console.error("Error saving order:", error);
                     alert("Checkout failed.");
-                } else {
-                    console.log("Checkout successful!");
-                    alert("Checkout successful!");
-                    cart = [];
-                    updateCartDisplay();
+                    return; // Stop execution if order saving fails
                 }
+
+                // Call the server-side function to create a checkout session
+                const response = await fetch('/create-checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: cart }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Error creating checkout session:", errorData);
+                    alert("Checkout failed.");
+                    return; // Stop execution if session creation fails
+                }
+
+                const { url } = await response.json();
+                window.location.href = url; // Redirect to Stripe Checkout
             } catch (error) {
                 console.error("Error in simulateCheckout:", error);
                 alert("Checkout failed due to an unexpected error.");
