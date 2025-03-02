@@ -14,15 +14,11 @@
         <ul id="cart-items"></ul>
         <p>Total: $<span id="cart-total">0</span></p>
         <button id="checkout">Simulate Checkout</button>
-        <div id="order-summary" style="display: none;">
-            <h3>Order Summary</h3>
-            <ul id="ordered-items"></ul>
-            <div id="payment-options" style="display: block;">
-                <h3>Payment Options</h3>
-                <button onclick="processPayment('card')">Card</button>
-                <button onclick="processPayment('cash')">Cash</button>
-                <button onclick="processPayment('cod')">COD</button>
-            </div>
+        <div id="payment-options" style="display: none;">
+            <h3>Payment Options</h3>
+            <button onclick="processPayment('card')">Card</button>
+            <button onclick="processPayment('cash')">Cash</button>
+            <button onclick="processPayment('cod')">COD</button>
         </div>
     </div>
     <script>
@@ -40,10 +36,10 @@
             const productDiv = document.createElement("div");
             productDiv.classList.add("product");
             productDiv.innerHTML = `
-                <img src="<span class="math-inline">\{product\.imageUrl\}" alt\="</span>{product.name}" width="150">
-                <h3><span class="math-inline">\{product\.name\}</h3\>
-<p\></span><span class="math-inline">\{product\.price\}</p\>
-<button onclick\="addToCart\(</span>{product.id})">Add to Cart</button>
+                <img src="${product.imageUrl}" alt="${product.name}" width="150">
+                <h3>${product.name}</h3>
+                <p>$${product.price}</p>
+                <button onclick="addToCart(${product.id})">Add to Cart</button>
             `;
             productsDiv.appendChild(productDiv);
         });
@@ -102,24 +98,13 @@
                     alert("Checkout failed.");
                     return;
                 }
-                displayOrderSummary();
+                document.getElementById('payment-options').style.display = 'block';
                 document.getElementById('checkout').style.display = 'none';
 
             } catch (error) {
                 console.error("Error in simulateCheckout:", error);
                 alert("Checkout failed due to an unexpected error.");
             }
-        }
-
-        function displayOrderSummary() {
-            const orderedItemsList = document.getElementById("ordered-items");
-            orderedItemsList.innerHTML = "";
-            cart.forEach(item => {
-                const li = document.createElement("li");
-                li.textContent = `${item.name} - $${item.price}`;
-                orderedItemsList.appendChild(li);
-            });
-            document.getElementById('order-summary').style.display = 'block';
         }
 
         async function processPayment(paymentMethod) {
@@ -149,7 +134,14 @@
                 alert(`Payment successful! (Method: ${paymentMethod})`);
                 cart = [];
                 updateCartDisplay();
-                document.getElementById('order-summary').style.display = 'none';
+                document.getElementById('payment-options').style.display = 'none';
                 document.getElementById('checkout').style.display = 'block';
 
+            } catch (error) {
+                console.error("Error in processPayment:", error);
+                alert("Payment failed due to an unexpected error.");
             }
+        }
+    </script>
+</body>
+</html>
