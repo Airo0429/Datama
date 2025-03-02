@@ -18,185 +18,184 @@
 
 <body>
 
-    <div id="products"></div>
+ <div id="products"></div>
 
-    <div id="cart">
+ <div id="cart">
 
-        <h2>Cart</h2>
+ <h2>Cart</h2>
 
-        <ul id="cart-items"></ul>
+ <ul id="cart-items"></ul>
 
-        <p>Total: $<span id="cart-total">0</span></p>
+ <p>Total: $<span id="cart-total">0</span></p>
 
-        <button id="checkout">Simulate Checkout</button>
+ <button id="checkout">Simulate Checkout</button>
 
-    </div>
+ </div>
 
-    <script>
+ <script>
 
-        const products = [
+ const products = [
 
-            { id: 1, name: "DICE TEE PIGMENT DYED ( Black)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_BLAC_2.jpg?v=1739819686&width=480" },
+ { id: 1, name: "DICE TEE PIGMENT DYED ( Black)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_BLAC_2.jpg?v=1739819686&width=480" },
 
-            { id: 2, name: "DICE TEE PIGMENT DYED ( Natural)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_NATL_2_d124fbbe-4c1a-4160-b36f-40e6229b83f2.jpg?v=1739819682&width=480" },
+ { id: 2, name: "DICE TEE PIGMENT DYED ( Natural)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_NATL_2_d124fbbe-4c1a-4160-b36f-40e6229b83f2.jpg?v=1739819682&width=480" },
 
-            { id: 3, name: "DICE TEE PIGMENT DYED ( Navy)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_GRPE_2_17cd6dcc-4f0e-49df-87ef-1f620fe001ab.jpg?v=1739819668&width=480" },
+ { id: 3, name: "DICE TEE PIGMENT DYED ( Navy)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_GRPE_2_17cd6dcc-4f0e-49df-87ef-1f620fe001ab.jpg?v=1739819668&width=480" },
 
-            { id: 4, name: "DICE TEE PIGMENT DYED ( Yellow)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_YELO_2.jpg?v=1739819673&width=480" },
+ { id: 4, name: "DICE TEE PIGMENT DYED ( Yellow)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_YELO_2.jpg?v=1739819673&width=480" },
 
-            { id: 5, name: "DICE TEE PIGMENT DYED ( Grap)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_NAVY_2_0c2ba580-5925-44de-bdf0-8805ea07fc0e.jpg?v=1739819678&width=480" }
+ { id: 5, name: "DICE TEE PIGMENT DYED ( Grap)", price: 45, imageUrl: "https://www.stussy.com/cdn/shop/files/1905077_NAVY_2_0c2ba580-5925-44de-bdf0-8805ea07fc0e.jpg?v=1739819678&width=480" }
 
-        ];
+ ];
 
 
 
-        const productsDiv = document.getElementById("products");
+ const productsDiv = document.getElementById("products");
 
 
 
-        products.forEach(product => {
+ products.forEach(product => {
 
-            const productDiv = document.createElement("div");
+ const productDiv = document.createElement("div");
 
-            productDiv.classList.add("product");
+ productDiv.classList.add("product");
 
-            productDiv.innerHTML = `
+ productDiv.innerHTML = `
 
-                <img src="${product.imageUrl}" alt="${product.name}" width="150">
+ <img src="${product.imageUrl}" alt="${product.name}" width="150">
 
-                <h3>${product.name}</h3>
+ <h3>${product.name}</h3>
 
-                <p>$${product.price}</p>
+ <p>$${product.price}</p>
 
-                <button onclick="addToCart(${product.id})">Add to Cart</button>
+ <button onclick="addToCart(${product.id})">Add to Cart</button>
 
-            `;
+ `;
 
-            productsDiv.appendChild(productDiv);
+ productsDiv.appendChild(productDiv);
 
-        });
+ });
 
 
 
-        let cart = [];
+ let cart = [];
 
 
 
-        function addToCart(productId) {
+ function addToCart(productId) {
 
-            const product = products.find(p => p.id === productId);
+ const product = products.find(p => p.id === productId);
 
-            if (product) {
+ if (product) {
 
-                cart.push(product);
+ cart.push(product);
 
-                updateCartDisplay();
+ updateCartDisplay();
 
-            }
+ }
 
-        }
+ }
 
 
 
-        function updateCartDisplay() {
+ function updateCartDisplay() {
 
-            const cartItemsList = document.getElementById("cart-items");
+ const cartItemsList = document.getElementById("cart-items");
 
-            const cartTotalSpan = document.getElementById("cart-total");
+ const cartTotalSpan = document.getElementById("cart-total");
 
-            cartItemsList.innerHTML = "";
+  cartItemsList.innerHTML = "";
 
-            let total = 0;
+ let total = 0;
 
 
 
-            cart.forEach(item => {
+ cart.forEach(item => {
 
-                const li = document.createElement("li");
+ const li = document.createElement("li");
 
-                li.textContent = `${item.name} - $${item.price}`;
+ li.textContent = `${item.name} - $${item.price}`;
 
-                cartItemsList.appendChild(li);
+ cartItemsList.appendChild(li);
 
-                total += item.price;
+ total += item.price;
 
-            });
+ });
 
 
 
-            cartTotalSpan.textContent = total;
+ cartTotalSpan.textContent = total;
+ }
 
-        }
 
 
+ const checkoutButton = document.getElementById("checkout");
 
-        const checkoutButton = document.getElementById("checkout");
+ checkoutButton.addEventListener("click", simulateCheckout);
 
-        checkoutButton.addEventListener("click", simulateCheckout);
 
 
+ async function simulateCheckout() {
 
-        async function simulateCheckout() {
+ try {
 
-            try {
+ const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co';
 
-                const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co';
+ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
 
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
+ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-                const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 
+ const orderData = cart.map(item => ({
 
-                const orderData = cart.map(item => ({
+ productid: item.id,
 
-                    productid: item.id,
+ productname: item.name,
 
-                    productname: item.name,
+ price: item.price
 
-                    price: item.price
+ }));
 
-                }));
 
 
+ const { error } = await supabaseClient
 
-                const { error } = await supabaseClient
+ .from('orders')
 
-                    .from('orders')
+ .insert(orderData);
 
-                    .insert(orderData);
 
 
+ if (error) {
 
-                if (error) {
+ console.error("Error saving order:", error);
 
-                    console.error("Error saving order:", error);
+ alert("Checkout failed.");
 
-                    alert("Checkout failed.");
+ } else {
 
-                } else {
+ console.log("Checkout successful!");
 
-                    console.log("Checkout successful!");
+ alert("Checkout successful!");
 
-                    alert("Checkout successful!");
+ cart = [];
 
-                    cart = [];
+ updateCartDisplay();
 
-                    updateCartDisplay();
+ }
 
-                }
+ } catch (error) {
 
-            } catch (error) {
+ console.error("Error in simulateCheckout:", error);
 
-                console.error("Error in simulateCheckout:", error);
+ alert("Checkout failed due to an unexpected error.");
 
-                alert("Checkout failed due to an unexpected error.");
+ }
 
-            }
+ }
 
-        }
-
-    </script>
+ </script>
 
 </body>
 
