@@ -17,12 +17,12 @@
         <div id="order-summary" style="display: none;">
             <h3>Order Summary</h3>
             <ul id="ordered-items"></ul>
-            <div id="payment-options" style="display: block;">
-                <h3>Payment Options</h3>
-                <button onclick="processPayment('card')">Card</button>
-                <button onclick="processPayment('cash')">Cash</button>
-                <button onclick="processPayment('cod')">COD</button>
-            </div>
+        </div>
+        <div id="payment-options" style="display: none;">
+            <h3>Payment Options</h3>
+            <button onclick="processPayment('card')">Card</button>
+            <button onclick="processPayment('cash')">Cash</button>
+            <button onclick="processPayment('cod')">COD</button>
         </div>
     </div>
     <script>
@@ -103,6 +103,7 @@
                     return;
                 }
                 displayOrderSummary();
+                document.getElementById('payment-options').style.display = 'block';
                 document.getElementById('checkout').style.display = 'none';
 
             } catch (error) {
@@ -150,6 +151,3 @@
                 cart = [];
                 updateCartDisplay();
                 document.getElementById('order-summary').style.display = 'none';
-                document.getElementById('checkout').style.display = 'block';
-
-            }
