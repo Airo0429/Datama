@@ -14,20 +14,11 @@
         <ul id="cart-items"></ul>
         <p>Total: $<span id="cart-total">0</span></p>
         <button id="checkout">Simulate Checkout</button>
-        <div id="order-summary" style="display: none;">
-            <h3>Order Summary</h3>
-            <ul id="ordered-items"></ul>
-        </div>
         <div id="payment-options" style="display: none;">
             <h3>Payment Options</h3>
-            <button onclick="showCardInput()">Card</button>
+            <button onclick="processPayment('card')">Card</button>
             <button onclick="processPayment('cash')">Cash</button>
             <button onclick="processPayment('cod')">COD</button>
-        </div>
-        <div id="card-input" style="display: none;">
-            <h3>Enter Card Details</h3>
-            <input type="text" id="cardNumber" placeholder="Card Number">
-            <button onclick="processCardPayment()">Pay with Card</button>
         </div>
     </div>
     <script>
@@ -45,10 +36,10 @@
             const productDiv = document.createElement("div");
             productDiv.classList.add("product");
             productDiv.innerHTML = `
-                <img src="<span class="math-inline">\{product\.imageUrl\}" alt\="</span>{product.name}" width="150">
-                <h3><span class="math-inline">\{product\.name\}</h3\>
-<p\></span><span class="math-inline">\{product\.price\}</p\>
-<button onclick\="addToCart\(</span>{product.id})">Add to Cart</button>
+                <img src="${product.imageUrl}" alt="${product.name}" width="150">
+                <h3>${product.name}</h3>
+                <p>$${product.price}</p>
+                <button onclick="addToCart(${product.id})">Add to Cart</button>
             `;
             productsDiv.appendChild(productDiv);
         });
@@ -107,8 +98,6 @@
                     alert("Checkout failed.");
                     return;
                 }
-
-                displayOrderSummary();
                 document.getElementById('payment-options').style.display = 'block';
                 document.getElementById('checkout').style.display = 'none';
 
@@ -118,33 +107,41 @@
             }
         }
 
-        function displayOrderSummary() {
-            const orderedItemsList = document.getElementById("ordered-items");
-            orderedItemsList.innerHTML = "";
-            cart.forEach(item => {
-                const li = document.createElement("li");
-                li.textContent = `${item.name} - $${item.price}`;
-                orderedItemsList.appendChild(li);
-            });
-            document.getElementById('order-summary').style.display = 'block';
-        }
-
-        function showCardInput() {
-            document.getElementById('payment-options').style.display = 'none';
-            document.getElementById('card-input').style.display = 'block';
-        }
-
-        async function processCardPayment() {
-            const cardNumber = document.getElementById('cardNumber').value;
-            // In a real app, you would never send card details directly. Use a payment gateway!
-            if (!cardNumber) {
-                alert("Please enter a card number.");
-                return;
-            }
-
+        async function processPayment(paymentMethod) {
             try {
                 const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co';
                 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
                 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
                 const paymentData = {
+                    amount: totalAmount,
+                    status: 'paid',
+                    payment_method: paymentMethod,
+                    order_items: cart.map(item => item.id),
+                };
+
+                const { error: paymentError } = await supabaseClient
+                    .from('payments')
+                    .insert([paymentData]);
+
+                if (paymentError) {
+                    console.error("Error saving payment:", paymentError);
+                    alert("Payment failed.");
+                    return;
+                }
+
+                console.log("Checkout and Payment successful!");
+                alert(`Payment successful! (Method: ${paymentMethod})`);
+                cart = [];
+                updateCartDisplay();
+                document.getElementById('payment-options').style.display = 'none';
+                document.getElementById('checkout').style.display = 'block';
+
+            } catch (error) {
+                console.error("Error in processPayment:", error);
+                alert("Payment failed due to an unexpected error.");
+            }
+        }
+    </script>
+</body>
+</html>
