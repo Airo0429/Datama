@@ -13,7 +13,13 @@
         <h2>Cart</h2>
         <ul id="cart-items"></ul>
         <p>Total: $<span id="cart-total">0</span></p>
-        <button id="checkout">Simulate Checkout & Payment</button>
+        <button id="checkout">Simulate Checkout</button>
+        <div id="payment-options" style="display: none;">
+            <h3>Payment Options</h3>
+            <button onclick="processPayment('card')">Card</button>
+            <button onclick="processPayment('cash')">Cash</button>
+            <button onclick="processPayment('cod')">COD</button>
+        </div>
     </div>
     <script>
         const products = [
@@ -39,6 +45,8 @@
         });
 
         let cart = [];
+        let orderData;
+        let totalAmount;
 
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
@@ -73,13 +81,13 @@
                 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
                 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-                const orderData = cart.map(item => ({
+                orderData = cart.map(item => ({
                     productid: item.id,
                     productname: item.name,
                     price: item.price
                 }));
 
-                const totalAmount = cart.reduce((acc, item) => acc + item.price, 0);
+                totalAmount = cart.reduce((acc, item) => acc + item.price, 0);
 
                 const { error: orderError } = await supabaseClient
                     .from('orders')
@@ -90,12 +98,25 @@
                     alert("Checkout failed.");
                     return;
                 }
+                document.getElementById('payment-options').style.display = 'block';
+                document.getElementById('checkout').style.display = 'none';
 
-                // Simulate Payment (Hardcoded Success)
+            } catch (error) {
+                console.error("Error in simulateCheckout:", error);
+                alert("Checkout failed due to an unexpected error.");
+            }
+        }
+
+        async function processPayment(paymentMethod) {
+            try {
+                const supabaseUrl = 'https://vtejldsdbutlyaorivaa.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0ZWpsZHNkYnV0bHlhb3JpdmFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NjUwMzgsImV4cCI6MjA1NjA0MTAzOH0.TjP22TydWtdALDtrKJeYrBfwpbvdtkzeh0iV615wVG4';
+                const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
                 const paymentData = {
                     amount: totalAmount,
-                    status: 'paid', // Or 'pending', 'failed', etc.
-                    payment_method: 'simulated',
+                    status: 'paid',
+                    payment_method: paymentMethod,
                     order_items: cart.map(item => item.id),
                 };
 
@@ -110,12 +131,15 @@
                 }
 
                 console.log("Checkout and Payment successful!");
-                alert("Checkout and Payment successful!");
+                alert(`Payment successful! (Method: ${paymentMethod})`);
                 cart = [];
                 updateCartDisplay();
+                document.getElementById('payment-options').style.display = 'none';
+                document.getElementById('checkout').style.display = 'block';
+
             } catch (error) {
-                console.error("Error in simulateCheckout:", error);
-                alert("Checkout failed due to an unexpected error.");
+                console.error("Error in processPayment:", error);
+                alert("Payment failed due to an unexpected error.");
             }
         }
     </script>
